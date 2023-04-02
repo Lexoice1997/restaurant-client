@@ -1,0 +1,11 @@
+.admin {
+  max-width: 1200px;
+  min-width: 380px;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+.admin-navlink {
+  text-decoration: none;
+  color: inherit;
+}
