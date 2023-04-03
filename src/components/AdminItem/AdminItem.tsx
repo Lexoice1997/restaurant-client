@@ -1,36 +1,21 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  Box,
-  Button,
-  IconButton,
-  Popper,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Box, Button, IconButton, Popper, Tooltip, Typography } from "@mui/material";
+import React from "react";
+import { Toaster } from "react-hot-toast";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useAppDispatch, useAppSelector } from "../../helpers/hooks/redux";
 import { useRemoveCategoryMutation } from "../../store/services/apiService";
 import {
   setCategoryId,
+  setCategoryName,
   setEditCategory,
   setModalCategory,
 } from "../../store/slices/categorySlice";
-import {
-  setEditFood,
-  setIdFood,
-  setModalFood,
-} from "../../store/slices/foodSlice";
+import { setEditFood, setIdFood, setModalFood } from "../../store/slices/foodSlice";
 import { Category } from "../../types/Category";
 import { Food } from "../../types/Food";
-import CategoryModal from "../CategoryModal/CategoryModal";
-import FoodModal from "../FoodModal/FoodModal";
 import FoodsItem from "../FoodsItem/FoodsItem";
 import "./AdminItem.css";
-
-const notifyFood = () => toast("Блюдо не загрузился");
-const notifyCategory = () => toast("Категория не загрузился");
 
 const AdminItem = ({ category }: { category: Category }) => {
   const dispatch = useAppDispatch();
@@ -41,16 +26,17 @@ const AdminItem = ({ category }: { category: Category }) => {
   const openPopper = Boolean(anchorEl);
   const id = modal ? "simple-popper" : undefined;
 
-  const handleEditFood = (id: string) => {
-    dispatch(setEditFood(true));
-    dispatch(setIdFood(id));
-    dispatch(setCategoryId(category.id));
-    dispatch(setModalFood(true));
-  };
+  // const handleEditFood = (id: string) => {
+  //   dispatch(setEditFood(true));
+  //   dispatch(setIdFood(id));
+  //   dispatch(setCategoryId(category.id));
+  //   dispatch(setModalFood(true));
+  // };
 
-  const handleOpenCategory = () => {
+  const handleOpenCategory = (id: string, name: string) => {
     dispatch(setEditCategory(true));
-    dispatch(setCategoryId(category.id));
+    dispatch(setCategoryId(id));
+    dispatch(setCategoryName(name));
     dispatch(setModalCategory(true));
   };
 
@@ -77,7 +63,7 @@ const AdminItem = ({ category }: { category: Category }) => {
           <Typography
             variant="h4"
             sx={{ cursor: "pointer" }}
-            onClick={handleOpenCategory}
+            onClick={() => handleOpenCategory(category.id, category.name)}
           >
             {category.name}
           </Typography>
@@ -87,12 +73,7 @@ const AdminItem = ({ category }: { category: Category }) => {
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-            <Popper
-              id={id}
-              open={openPopper}
-              anchorEl={anchorEl}
-              placement="top"
-            >
+            <Popper id={id} open={openPopper} anchorEl={anchorEl} placement="top">
               <Box sx={{ border: 1, p: 1, bgcolor: "background.paper" }}>
                 <Typography>Вы точно хотите удалить?</Typography>
                 <Box sx={{ marginTop: 2 }}>
@@ -105,12 +86,7 @@ const AdminItem = ({ category }: { category: Category }) => {
                   >
                     Да
                   </Button>
-                  <Button
-                    onClick={handleClick}
-                    variant="contained"
-                    color="success"
-                    size="small"
-                  >
+                  <Button onClick={handleClick} variant="contained" color="success" size="small">
                     Нет
                   </Button>
                 </Box>
@@ -119,12 +95,7 @@ const AdminItem = ({ category }: { category: Category }) => {
           </Box>
         </Box>
 
-        <Button
-          variant="contained"
-          size="small"
-          color="secondary"
-          onClick={handleOpenFood}
-        >
+        <Button variant="contained" size="small" color="secondary" onClick={handleOpenFood}>
           Добавить
         </Button>
       </div>
@@ -164,15 +135,13 @@ const AdminItem = ({ category }: { category: Category }) => {
                 description={item.description}
                 price={item.price}
                 image={item.image}
-                setEdit={() => handleEditFood(item.id)}
+                categoryId={category.id}
                 admin={true}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
-      <FoodModal notify={notifyFood} />
-      <CategoryModal notify={notifyCategory} />
     </div>
   );
 };

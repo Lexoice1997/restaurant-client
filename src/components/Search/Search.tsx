@@ -1,6 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../helpers/hooks/redux";
+import { useAppDispatch } from "../../helpers/hooks/redux";
 import useDebounce from "../../helpers/hooks/useDebounce";
 import { searchFoods } from "../../store/slices/foodSlice";
 import "./Search.css";
@@ -16,7 +16,7 @@ const Search = () => {
 
   useEffect(() => {
     dispatch(searchFoods(searchWord));
-  }, [debouncedValue]);
+  }, [debouncedValue, dispatch, searchWord]);
 
   return (
     <div className="search">

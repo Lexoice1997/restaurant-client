@@ -1,22 +1,25 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { NavLink } from "react-router-dom";
 import AdminCategory from "../../components/AdminCategory/AdminCategory";
 import AdminItem from "../../components/AdminItem/AdminItem";
+import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import ChangePasswordModal from "../../components/ChangePasswordModal/ChangePasswordModal";
+import FoodModal from "../../components/FoodModal/FoodModal";
 import { useAppDispatch, useAppSelector } from "../../helpers/hooks/redux";
 import { useGetAllCategoriesWithFoodsQuery } from "../../store/services/apiService";
 import { check, setAuthModal } from "../../store/slices/authSlice";
 import { Category } from "../../types/Category";
 import "./Admin.css";
 
+const notifyFood = () => toast("Блюдо не загрузился");
+
+const notifyCategory = () => toast("Категория не загрузился");
+
 const Admin = () => {
   const dispatch = useAppDispatch();
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useGetAllCategoriesWithFoodsQuery(null);
+  const { data: categories } = useGetAllCategoriesWithFoodsQuery(null);
   const { name, phone, token } = useAppSelector((state) => state.auth);
 
   const handleOpenModalAuth = () => {
@@ -25,7 +28,7 @@ const Admin = () => {
 
   useEffect(() => {
     dispatch(check(token));
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   return (
     <div className="admin">
@@ -53,6 +56,8 @@ const Admin = () => {
       ))}
       <AdminCategory />
       <ChangePasswordModal />
+      <FoodModal notify={notifyFood} />
+      <CategoryModal notify={notifyCategory} />
     </div>
   );
 };

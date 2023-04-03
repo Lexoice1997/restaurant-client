@@ -1,27 +1,34 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  Box,
-  Button,
-  IconButton,
-  Popper,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, Popper, Tooltip, Typography } from "@mui/material";
 import React from "react";
+import { useAppDispatch } from "../../helpers/hooks/redux";
 import { useRemoveFoodMutation } from "../../store/services/apiService";
+import { setCategoryId } from "../../store/slices/categorySlice";
+import { setEditFood, setFoodInfo, setModalFood } from "../../store/slices/foodSlice";
 
 interface FoodsItemAction {
   id: string;
-  setEdit?: () => void;
+  name: string;
+  description: string;
+  price: string;
+  categoryId: string;
 }
 
-const FoodsItemAction = ({ id, setEdit }: FoodsItemAction) => {
-  const [removeFood, { error: createError }] = useRemoveFoodMutation();
+const FoodsItemAction = ({ id, name, description, price, categoryId }: FoodsItemAction) => {
+  const [removeFood] = useRemoveFoodMutation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const dispatch = useAppDispatch();
   const openPopper = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const setEdit = () => {
+    dispatch(setFoodInfo({ id, name, description, price }));
+    dispatch(setCategoryId(categoryId));
+    dispatch(setEditFood(true));
+    dispatch(setModalFood(true));
   };
 
   const onHandleRemoveFood = () => {
@@ -35,13 +42,7 @@ const FoodsItemAction = ({ id, setEdit }: FoodsItemAction) => {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-        <Popper
-          id={id}
-          open={openPopper}
-          anchorEl={anchorEl}
-          placement="top"
-          sx={{ zIndex: 2 }}
-        >
+        <Popper id={id} open={openPopper} anchorEl={anchorEl} placement="top" sx={{ zIndex: 2 }}>
           <Box sx={{ border: 1, p: 1, bgcolor: "white" }}>
             <Typography>Вы точно хотите удалить?</Typography>
             <Box sx={{ marginTop: 2 }}>
@@ -54,12 +55,7 @@ const FoodsItemAction = ({ id, setEdit }: FoodsItemAction) => {
               >
                 Да
               </Button>
-              <Button
-                onClick={handleClick}
-                variant="contained"
-                color="success"
-                size="small"
-              >
+              <Button onClick={handleClick} variant="contained" color="success" size="small">
                 Нет
               </Button>
             </Box>

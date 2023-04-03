@@ -9,7 +9,7 @@ import {
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
 } from "../../store/services/apiService";
-import { setModalCategory } from "../../store/slices/categorySlice";
+import { setCategoryName, setModalCategory } from "../../store/slices/categorySlice";
 import { ICategoryModal } from "../../types/Modal";
 
 const style = {
@@ -26,9 +26,10 @@ const style = {
 
 export default function CategoryModal({ notify }: ICategoryModal) {
   const dispatch = useAppDispatch();
-  const { modal, edit, categoryId } = useAppSelector((state) => state.category);
+  const { modal, edit, categoryId, categoryName } = useAppSelector((state) => state.category);
   const [createCategory, { error: createError }] = useCreateCategoryMutation();
   const [updateCategory, { error: updateError }] = useUpdateCategoryMutation();
+  const [categoryValue, setCategoryValue] = React.useState("");
 
   const handleClose = () => dispatch(setModalCategory(false));
 
@@ -61,6 +62,16 @@ export default function CategoryModal({ notify }: ICategoryModal) {
     }
   };
 
+  React.useLayoutEffect(() => {
+    if (edit) {
+      setCategoryValue(categoryName);
+    }
+
+    return () => {
+      dispatch(setCategoryName(""));
+    };
+  }, [categoryName, dispatch, edit]);
+
   return (
     <>
       <Modal
@@ -75,12 +86,7 @@ export default function CategoryModal({ notify }: ICategoryModal) {
             <Typography component="h1" variant="h5">
               {edit ? "Изменить категорию" : "Добавить категорию"}
             </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 size="small"
@@ -90,14 +96,10 @@ export default function CategoryModal({ notify }: ICategoryModal) {
                 label="Название"
                 name="name"
                 autoFocus
+                defaultValue={categoryValue}
               />
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 {edit ? "Изменить" : "Создать"}
               </Button>
             </Box>

@@ -4,15 +4,7 @@ import { Food } from "../../types/Food";
 import "./FoodsItem.css";
 import FoodsItemAction from "./FoodsItemAction";
 
-const FoodsItem = ({
-  id,
-  name,
-  description,
-  price,
-  image,
-  setEdit,
-  admin,
-}: Food) => {
+const FoodsItem = ({ id, name, description, price, image, admin, categoryId }: Food) => {
   return (
     <div className="food">
       <LazyLoadImage
@@ -25,10 +17,22 @@ const FoodsItem = ({
       />
       {/* <img src={image} className="food-img" alt={name} /> */}
       <div className="food-info">
-        <h2 className="food-name">{name}</h2>
-        <p className="food-description">{description}</p>
-        <p className="food-price">{price} сум</p>
-        {admin && <FoodsItemAction id={id} setEdit={setEdit} />}
+        <div>
+          <h2 className="food-name">{name}</h2>
+          <p className="food-description">{description}</p>
+        </div>
+        <div>
+          <p className="food-price">{price} сум</p>
+          {admin && (
+            <FoodsItemAction
+              id={id}
+              name={name}
+              description={description}
+              categoryId={categoryId}
+              price={price}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

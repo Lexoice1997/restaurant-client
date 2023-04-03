@@ -9,7 +9,7 @@ import "./Categories.css";
 import CategoriesSkeleton from "./CategpriesSkeleton";
 
 const Categories = () => {
-  const { data: categories, isLoading, error } = useGetAllCategoriesQuery(null);
+  const { data: categories, isLoading } = useGetAllCategoriesQuery(null);
 
   const [categoryActiveId, setCategoryActiveId] = useState<string>("");
 
@@ -31,15 +31,8 @@ const Categories = () => {
       className="mySwiper categories"
     >
       {categories?.map((item: Category) => (
-        <SwiperSlide
-          key={item.id}
-          onClick={() => handleSetCategoryIdActive(item.id)}
-        >
-          <CategoriesItem
-            id={item.id}
-            name={item.name}
-            categoryActiveId={categoryActiveId}
-          />
+        <SwiperSlide key={item.id} onClick={() => handleSetCategoryIdActive(item.id)}>
+          <CategoriesItem id={item.id} name={item.name} categoryActiveId={categoryActiveId} />
         </SwiperSlide>
       ))}
     </Swiper>

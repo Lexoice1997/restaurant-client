@@ -7,4 +7,5 @@ export interface Food {
   fileId?: string;
   setEdit?: () => void;
   admin?: boolean;
+  categoryId: string;
 }

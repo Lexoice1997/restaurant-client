@@ -1,8 +1,5 @@
 import { useAppDispatch } from "../../helpers/hooks/redux";
-import {
-  setCategoryId,
-  setCategoryName,
-} from "../../store/slices/categorySlice";
+import { setCategoryId, setCategoryName } from "../../store/slices/categorySlice";
 import { Category } from "../../types/Category";
 
 const CategoriesItem = ({ id, name, categoryActiveId }: Category) => {
@@ -14,9 +11,7 @@ const CategoriesItem = ({ id, name, categoryActiveId }: Category) => {
   };
   return (
     <div
-      className={
-        categoryActiveId === id ? "category category-active" : "category"
-      }
+      className={categoryActiveId === id ? "category category-active" : "category"}
       onClick={handleSetCategoryId}
     >
       {name}

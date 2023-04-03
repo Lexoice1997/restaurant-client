@@ -9,9 +9,7 @@ import FoodsSkeleton from "./FoodsSkeleton";
 
 const Foods = () => {
   const dispatch = useAppDispatch();
-  const { categoryId, categoryName } = useAppSelector(
-    (state) => state.category
-  );
+  const { categoryId, categoryName } = useAppSelector((state) => state.category);
   const { foods } = useAppSelector((state) => state.food);
   const { data, isLoading } = useGetFoodsByCategoryIdQuery(categoryId);
 
@@ -33,6 +31,7 @@ const Foods = () => {
             id={item.id}
             name={item.name}
             description={item.description}
+            categoryId={categoryId}
             price={item.price}
             image={item.image}
             admin={false}

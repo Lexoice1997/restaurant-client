@@ -1,10 +1,13 @@
 import { Button } from "@mui/material";
 import { useAppDispatch } from "../../helpers/hooks/redux";
-import { setModalCategory } from "../../store/slices/categorySlice";
+import { setEditCategory, setModalCategory } from "../../store/slices/categorySlice";
 
 const AdminCategory = () => {
   const dispatch = useAppDispatch();
-  const handleOpen = () => dispatch(setModalCategory(true));
+  const handleOpen = () => {
+    dispatch(setEditCategory(false));
+    dispatch(setModalCategory(true));
+  };
 
   return (
     <>
